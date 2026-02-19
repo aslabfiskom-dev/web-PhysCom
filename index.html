@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Praktikum Fisika Komputasi</title>
+<title>Lab Pemrograman — Profile</title>
 <link rel="icon" type="image/png" href="logo_akn.png">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -636,6 +636,199 @@
     .modules-grid { grid-template-columns: 1fr; }
     .module-card { padding: 1.5rem; }
   }
+
+  /* ============================================
+    REFERENSI — CARD DECK 3D
+  ============================================ */
+  .ref-section { background: var(--bg); }
+
+  /* Deck pile */
+  .deck-pile {
+    position: relative;
+    width: 240px; height: 320px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: 0 auto 1rem;
+  }
+  .deck-pile-label {
+    position: absolute; bottom: -2.2rem; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem; color: var(--muted);
+    white-space: nowrap; letter-spacing: 0.06em;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .pile-dot { width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulseDot 1.5s ease-in-out infinite; }
+  @keyframes pulseDot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+  .pile-card {
+    position: absolute; inset: 0; border-radius: 8px;
+    transition: all 0.6s cubic-bezier(0.34,1.3,0.64,1);
+    transform-style: preserve-3d;
+  }
+  .pile-card-face {
+    position: absolute; inset: 0; border-radius: 8px;
+    backface-visibility: hidden;
+    display: flex; flex-direction: column; overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+  .pile-card-face::before {
+    content:''; position:absolute; inset:0;
+    background: repeating-linear-gradient(45deg,transparent,transparent 15px,rgba(255,255,255,0.015) 15px,rgba(255,255,255,0.015) 30px);
+  }
+  .pile-card-face::after {
+    content:''; position:absolute; top:0;left:0;right:0;height:45%;
+    background: linear-gradient(to bottom,rgba(255,255,255,0.07),transparent);
+  }
+  .pile-card:nth-child(1) { transform:translateY(0px) rotateX(2deg); z-index:10; }
+  .pile-card:nth-child(2) { transform:translateY(6px) rotateX(2deg) scale(0.97); z-index:9; filter:brightness(0.8); }
+  .pile-card:nth-child(3) { transform:translateY(12px) rotateX(2deg) scale(0.94); z-index:8; filter:brightness(0.65); }
+  .pile-card:nth-child(4) { transform:translateY(18px) rotateX(2deg) scale(0.91); z-index:7; filter:brightness(0.5); }
+  .pile-card:nth-child(5) { transform:translateY(24px) rotateX(2deg) scale(0.88); z-index:6; filter:brightness(0.4); }
+
+  .pile-deck-center {
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:1rem; z-index:1;
+  }
+  .pile-deck-icon { font-size:3rem; }
+  .pile-deck-count { font-family:'JetBrains Mono',monospace; font-size:0.7rem; color:rgba(255,255,255,0.5); letter-spacing:0.1em; }
+  .pile-deck-cta { font-family:'JetBrains Mono',monospace; font-size:0.58rem; color:rgba(255,255,255,0.3); }
+
+  /* Fan scene */
+  .fan-scene {
+    display: none; position: relative;
+    width: 100%; height: 250px;
+    perspective: 1200px;
+    justify-content: center; align-items: flex-end;
+  }
+  .fan-scene.show { display: flex; }
+
+  .fan-card {
+    position: absolute; border-radius: 8px;
+    cursor: pointer; transform-style: preserve-3d;
+    transform-origin: bottom center;
+    filter: brightness(0.7) saturate(0.7);
+    bottom: 0;
+  }
+  .fan-card:hover { filter:brightness(1.05) saturate(1); z-index:50 !important; }
+  .fan-card-inner {
+    width:100%;height:100%;border-radius:8px;
+    display:flex;flex-direction:column;overflow:hidden;
+    box-shadow:0 12px 40px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.07);
+    position:relative;
+  }
+  .fan-card-inner::before {
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(45deg,transparent,transparent 12px,rgba(255,255,255,0.014) 12px,rgba(255,255,255,0.014) 24px);
+  }
+  .fan-card-inner::after {
+    content:'';position:absolute;top:0;left:0;right:0;height:45%;
+    background:linear-gradient(to bottom,rgba(255,255,255,0.07),transparent);
+  }
+  .fc-top { padding:0.65rem 0.8rem 0.5rem;display:flex;justify-content:space-between;align-items:center;z-index:1; }
+  .fc-num { font-family:'JetBrains Mono',monospace;font-size:0.55rem;color:rgba(255,255,255,0.45);letter-spacing:0.08em; }
+  .fc-lang { font-family:'JetBrains Mono',monospace;font-size:0.48rem;padding:0.12rem 0.4rem;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.4);border-radius:2px; }
+  .fc-mid { flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;z-index:1;padding:0 0.8rem; }
+  .fc-icon { font-size:2.8rem;filter:drop-shadow(0 3px 8px rgba(0,0,0,0.4)); }
+  .fc-title { font-size:0.72rem;font-weight:800;text-align:center;color:rgba(255,255,255,0.9);line-height:1.25;text-shadow:0 1px 4px rgba(0,0,0,0.5); }
+  .fc-bot { padding:0.55rem 0.8rem;background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.06);z-index:1; }
+  .fc-author { font-family:'JetBrains Mono',monospace;font-size:0.54rem;color:rgba(255,255,255,0.55);margin-bottom:0.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  .fc-pub { font-family:'JetBrains Mono',monospace;font-size:0.48rem;color:rgba(255,255,255,0.28); }
+
+  /* Controls */
+  .ref-controls {
+    display:none; gap:0.8rem; align-items:center;
+    justify-content:center; flex-wrap:wrap;
+    margin-top: 2.5rem;
+  }
+  .ref-controls.show { display:flex; }
+  .ref-ctrl-btn {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.62rem;padding:0.5rem 1.1rem;
+    border:1px solid var(--border);background:var(--card);
+    color:var(--muted);cursor:pointer;transition:all 0.2s;letter-spacing:0.05em;
+  }
+  .ref-ctrl-btn:hover { border-color:var(--accent);color:var(--accent); }
+  .ref-ctrl-btn.active { border-color:var(--accent);color:var(--accent);background:rgba(0,245,160,0.05); }
+  .ref-ctrl-count { font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--muted); }
+  .ref-ctrl-count span { color:var(--accent); }
+
+  /* Ref modal */
+  .ref-overlay {
+    position:fixed;inset:0;background:rgba(5,8,15,0.9);
+    backdrop-filter:blur(12px);z-index:500;
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;transition:opacity 0.3s;
+  }
+  .ref-overlay.open { opacity:1;pointer-events:all; }
+  .ref-modal {
+    background:var(--surface);border:1px solid var(--border);
+    width:min(680px,92vw);position:relative;overflow:hidden;
+    transform:scale(0.88) translateY(30px);
+    transition:transform 0.45s cubic-bezier(0.34,1.3,0.64,1);
+  }
+  .ref-overlay.open .ref-modal { transform:scale(1) translateY(0); }
+  .ref-modal-bar { height:3px; }
+  .ref-modal-esc {
+    position:absolute;top:0.9rem;right:0.9rem;
+    font-family:'JetBrains Mono',monospace;font-size:0.52rem;
+    color:var(--muted);border:1px solid var(--border);
+    padding:0.18rem 0.5rem;cursor:pointer;transition:all 0.2s;
+  }
+  .ref-modal-esc:hover { color:var(--accent);border-color:var(--accent); }
+  .ref-modal-top {
+    padding:1.5rem 2rem 1rem;border-bottom:1px solid var(--border);
+    display:flex;gap:1.5rem;align-items:flex-start;
+  }
+  .ref-modal-cover {
+    flex-shrink:0;border-radius:2px 5px 5px 2px;
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;gap:6px;position:relative;overflow:hidden;
+    box-shadow:5px 5px 20px rgba(0,0,0,0.5);
+    width:100px;height:138px;
+  }
+  .ref-modal-cover::before { content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 8px,rgba(255,255,255,0.018) 8px,rgba(255,255,255,0.018) 16px); }
+  .ref-modal-cover::after { content:'';position:absolute;top:0;left:0;right:0;height:40%;background:linear-gradient(to bottom,rgba(255,255,255,0.07),transparent); }
+  .rmc-ic { font-size:2rem;z-index:1; }
+  .rmc-n { font-family:'JetBrains Mono',monospace;font-size:0.42rem;color:rgba(255,255,255,0.35);z-index:1; }
+  .ref-modal-info { flex:1; }
+  .rmi-n { font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;margin-bottom:0.35rem; }
+  .rmi-t { font-size:1rem;font-weight:800;line-height:1.25;margin-bottom:0.4rem; }
+  .rmi-a { font-family:'JetBrains Mono',monospace;font-size:0.65rem;margin-bottom:0.7rem; }
+  .rmi-chips { display:flex;gap:0.5rem;flex-wrap:wrap; }
+  .rmi-chip { font-family:'JetBrains Mono',monospace;font-size:0.54rem;padding:0.2rem 0.55rem;background:var(--card);border:1px solid var(--border);color:var(--muted); }
+  .ref-modal-body { padding:1.2rem 2rem;display:flex;flex-direction:column;gap:1rem; }
+  .rmb-lbl { font-family:'JetBrains Mono',monospace;font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;margin-bottom:0.3rem; }
+  .rmb-desc { font-size:0.84rem;color:var(--muted);line-height:1.75; }
+  .rmb-tags { display:flex;gap:0.4rem;flex-wrap:wrap; }
+  .rmb-tag { font-family:'JetBrains Mono',monospace;font-size:0.53rem;padding:0.2rem 0.55rem;border:1px solid var(--border);color:var(--muted);transition:all 0.15s;cursor:default; }
+  .rmb-tag:hover { border-color:var(--accent);color:var(--accent); }
+  .ref-modal-foot { padding:0.9rem 2rem;border-top:1px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:space-between; }
+  .rmf-back { font-family:'JetBrains Mono',monospace;font-size:0.62rem;color:var(--muted);cursor:pointer;padding:0.45rem 0.9rem;border:1px solid var(--border);transition:all 0.2s; }
+  .rmf-back:hover { color:#ff6b6b;border-color:#ff6b6b; }
+  .rmf-dl { font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:700;padding:0.45rem 1.3rem;color:#000;text-decoration:none;display:inline-flex;align-items:center;gap:0.4rem;transition:gap 0.2s; }
+  .rmf-dl:hover { gap:0.7rem; }
+
+  /* Responsive referensi */
+  @media (max-width: 1024px) {
+    .fan-scene { height: 300px; }
+  }
+  @media (max-width: 768px) {
+    .deck-pile { width:200px;height:270px; }
+    .fan-scene { height: 260px; }
+    .ref-modal-top { flex-direction:column;gap:1rem; }
+    .ref-modal-cover { width:80px;height:110px; }
+  }
+  @media (max-width: 480px) {
+    .deck-pile { width:180px;height:240px; }
+    .fan-scene { height: 220px; }
+    .ref-controls { gap:0.5rem; }
+    .ref-ctrl-btn { font-size:0.58rem;padding:0.4rem 0.8rem; }
+    .ref-modal-body { padding:1rem 1.2rem; }
+    .ref-modal-top { padding:1.2rem 1.2rem 0.8rem; }
+    .ref-modal-foot { padding:0.8rem 1.2rem;flex-direction:column;gap:0.6rem;align-items:stretch; }
+    .rmf-dl { justify-content:center; }
+  }
 </style>
 </head>
 <body>
@@ -646,11 +839,6 @@
 <!-- NAV -->
 <nav id="nav">
   <div class="nav-logo">
-    <!--
-      GANTI LOGO: ubah src di bawah ke path logo kamu, contoh:
-      src="logo.png" atau src="assets/logo.svg"
-      Jika belum ada logo, teks fallback di bawah akan tampil.
-    -->
     <img src="LOGO.png" alt="Lab Pemrograman"
          onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
     <span class="nav-logo-fallback" style="display:none">LAB<span style="color:var(--muted)">.</span>PROG<span style="color:var(--muted)">_</span></span>
@@ -659,6 +847,7 @@
     <a href="#modul">Modul</a>
     <a href="#tim">Tim</a>
     <a href="#jadwal">Jadwal</a>
+    <a href="#referensi">Referensi</a>
   </div>
 </nav>
 
@@ -877,6 +1066,71 @@
   </div>
 </section>
 
+<!-- REFERENSI -->
+<section id="referensi" class="ref-section">
+  <div class="section-tag">// 05 — REFERENSI</div>
+  <h2 class="section-title">Buku Referensi</h2>
+  <p class="section-desc">Koleksi buku pilihan untuk menunjang praktikum. Klik deck untuk membuka, pilih buku untuk detail.</p>
+
+  <!-- DECK PILE -->
+  <div class="deck-pile" id="refDeckPile" onclick="refFanOut()">
+    <div class="pile-card">
+      <div class="pile-card-face" style="background:linear-gradient(155deg,#162d5e,#0a1a3a)">
+        <div class="pile-deck-center">
+          <div class="pile-deck-icon">📚</div>
+          <div class="pile-deck-count">10 REFERENSI</div>
+          <div class="pile-deck-cta">klik untuk buka →</div>
+        </div>
+      </div>
+    </div>
+    <div class="pile-card"><div class="pile-card-face" style="background:linear-gradient(155deg,#0a4835,#051e16)"></div></div>
+    <div class="pile-card"><div class="pile-card-face" style="background:linear-gradient(155deg,#601818,#350c0c)"></div></div>
+    <div class="pile-card"><div class="pile-card-face" style="background:linear-gradient(155deg,#1e4808,#0d2504)"></div></div>
+    <div class="pile-card"><div class="pile-card-face" style="background:linear-gradient(155deg,#163848,#0a1e28)"></div></div>
+    <div class="deck-pile-label"><div class="pile-dot"></div> klik untuk buka deck</div>
+  </div>
+
+  <!-- FAN SCENE -->
+  <div class="fan-scene" id="refFanScene"></div>
+
+  <!-- CONTROLS -->
+  <div class="ref-controls" id="refControls">
+    <button class="ref-ctrl-btn active" onclick="refSort('all',this)">ALL</button>
+    <button class="ref-ctrl-btn" onclick="refSort('id',this)">🇮🇩 Indonesia</button>
+    <button class="ref-ctrl-btn" onclick="refSort('en',this)">🌐 English</button>
+    <button class="ref-ctrl-btn" onclick="refCollapse()">✕ Tutup Deck</button>
+    <div class="ref-ctrl-count">Menampilkan <span id="refShowCount">10</span> buku</div>
+  </div>
+</section>
+
+<!-- REF MODAL -->
+<div class="ref-overlay" id="refOverlay" onclick="refTryClose(event)">
+  <div class="ref-modal" onclick="event.stopPropagation()">
+    <div class="ref-modal-bar" id="refMBar"></div>
+    <div class="ref-modal-esc" onclick="refCloseModal()">ESC ✕</div>
+    <div class="ref-modal-top">
+      <div class="ref-modal-cover" id="refMCov">
+        <div class="rmc-ic" id="refMCovIc"></div>
+        <div class="rmc-n" id="refMCovN"></div>
+      </div>
+      <div class="ref-modal-info">
+        <div class="rmi-n" id="refMiN"></div>
+        <div class="rmi-t" id="refMiT"></div>
+        <div class="rmi-a" id="refMiA"></div>
+        <div class="rmi-chips" id="refMiC"></div>
+      </div>
+    </div>
+    <div class="ref-modal-body">
+      <div><div class="rmb-lbl">// DESKRIPSI</div><div class="rmb-desc" id="refMDesc"></div></div>
+      <div><div class="rmb-lbl">// TOPIK</div><div class="rmb-tags" id="refMTags"></div></div>
+    </div>
+    <div class="ref-modal-foot">
+      <div class="rmf-back" onclick="refCloseModal()">← Kembali ke deck</div>
+      <a href="#" class="rmf-dl" id="refMDl">→ Buka / Unduh</a>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-logo">LAB<span>.</span>PROG<span> — 2025</span></div>
@@ -998,7 +1252,185 @@
     });
   }, { threshold: 0.1 });
   reveals.forEach(r => io.observe(r));
+
+/* ============================================================
+   REFERENSI — CARD DECK 3D
+============================================================ */
+const refBooks = [
+  {id:1,cc:'linear-gradient(155deg,#162d5e,#0a1a3a)',accent:'#4fc3f7',icon:'📘',lang:'🇮🇩',langKey:'id',
+   num:'REF 01',short:'Algoritma & Pemrograman',
+   title:'Algoritma & Pemrograman dalam Bahasa Pascal dan C',
+   author:'Rinaldi Munir',year:'2023',pub:'Informatika',pages:'412 hal',
+   desc:'Buku klasik wajib kuliah algoritma di Indonesia. Membahas konsep dasar algoritma, struktur data, dan implementasinya dalam Pascal dan C dengan contoh soal lengkap.',
+   tags:['Algoritma','Pascal','C','Dasar','Indonesia'],link:'#'},
+  {id:2,cc:'linear-gradient(155deg,#3d1060,#200830)',accent:'#ce93d8',icon:'🧠',lang:'🌐',langKey:'en',
+   num:'REF 02',short:'Intro to Algorithms',
+   title:'Introduction to Algorithms (CLRS), 4th Edition',
+   author:'Cormen, Leiserson, Rivest, Stein',year:'2022',pub:'MIT Press',pages:'1312 hal',
+   desc:'Referensi algoritma paling komprehensif di dunia. Analisis kompleksitas, sorting, graph, dan dynamic programming dengan bukti matematis ketat.',
+   tags:['Algoritma','Advanced','Graph','DP'],link:'#'},
+  {id:3,cc:'linear-gradient(155deg,#0a4835,#051e16)',accent:'#00f5a0',icon:'🧹',lang:'🌐',langKey:'en',
+   num:'REF 03',short:'Clean Code',
+   title:'Clean Code: A Handbook of Agile Software Craftsmanship',
+   author:'Robert C. Martin',year:'2008',pub:'Prentice Hall',pages:'431 hal',
+   desc:'Panduan menulis kode yang bersih, mudah dibaca, dan mudah di-maintain. Wajib baca bagi siapapun yang ingin menjadi programmer profesional.',
+   tags:['Best Practice','Refactoring','OOP'],link:'#'},
+  {id:4,cc:'linear-gradient(155deg,#6a2c0a,#3a1505)',accent:'#ffb74d',icon:'🐍',lang:'🌐',langKey:'en',
+   num:'REF 04',short:'Python Crash Course',
+   title:'Python Crash Course, 3rd Edition',
+   author:'Eric Matthes',year:'2023',pub:'No Starch Press',pages:'552 hal',
+   desc:'Buku Python terbaik untuk pemula. Proyek nyata: game, visualisasi data, dan web app.',
+   tags:['Python','Pemula','Project'],link:'#'},
+  {id:5,cc:'linear-gradient(155deg,#601818,#350c0c)',accent:'#ef9a9a',icon:'☕',lang:'🌐',langKey:'en',
+   num:'REF 05',short:'Head First Java',
+   title:'Head First Java, 3rd Edition',
+   author:'Kathy Sierra & Bert Bates',year:'2022',pub:"O'Reilly",pages:'720 hal',
+   desc:'Belajar Java dengan pendekatan visual dan interaktif. OOP, GUI, dan dasar Java dengan cara yang menyenangkan.',
+   tags:['Java','OOP','Visual'],link:'#'},
+  {id:6,cc:'linear-gradient(155deg,#0b3858,#061e30)',accent:'#00c8ff',icon:'🔧',lang:'🌐',langKey:'en',
+   num:'REF 06',short:'Pragmatic Programmer',
+   title:'The Pragmatic Programmer, 20th Anniversary Edition',
+   author:'David Thomas & Andrew Hunt',year:'2019',pub:'Addison-Wesley',pages:'352 hal',
+   desc:'Mindset programmer profesional. Tips, teknik, dan filosofi yang membuat kode dan karir kamu jauh lebih baik.',
+   tags:['Mindset','Career','Best Practice'],link:'#'},
+  {id:7,cc:'linear-gradient(155deg,#1e4808,#0d2504)',accent:'#a5d6a7',icon:'🏗️',lang:'🇮🇩',langKey:'id',
+   num:'REF 07',short:'Pemrograman OOP C++',
+   title:'Pemrograman Berorientasi Objek dengan C++',
+   author:'Bambang Hariyanto',year:'2020',pub:'Informatika',pages:'380 hal',
+   desc:'Referensi OOP berbahasa Indonesia. Kelas, pewarisan, polimorfisme, dan enkapsulasi dengan C++ yang jelas.',
+   tags:['OOP','C++','Indonesia'],link:'#'},
+  {id:8,cc:'linear-gradient(155deg,#4a3808,#281e04)',accent:'#ffcc80',icon:'📐',lang:'🌐',langKey:'en',
+   num:'REF 08',short:'DSA in Java',
+   title:'Data Structures and Algorithms in Java, 6th Edition',
+   author:'Goodrich, Tamassia, Goldwasser',year:'2014',pub:'Wiley',pages:'736 hal',
+   desc:'Struktur data dari dasar hingga advanced dengan Java. Analisis performa dan studi kasus nyata.',
+   tags:['Struktur Data','Java','Advanced'],link:'#'},
+  {id:9,cc:'linear-gradient(155deg,#163848,#0a1e28)',accent:'#80deea',icon:'⚡',lang:'🌐',langKey:'en',
+   num:'REF 09',short:'Eloquent JavaScript',
+   title:'Eloquent JavaScript, 3rd Edition',
+   author:'Marijn Haverbeke',year:'2018',pub:'No Starch Press',pages:'472 hal',
+   desc:'Pengenalan mendalam JavaScript modern dari dasar hingga fungsional dan asynchronous.',
+   tags:['JavaScript','Web','Functional'],link:'#'},
+  {id:10,cc:'linear-gradient(155deg,#501630,#2a0818)',accent:'#f48fb1',icon:'📊',lang:'🇮🇩',langKey:'id',
+   num:'REF 10',short:'Struktur Data C/C++',
+   title:'Struktur Data dengan C dan C++',
+   author:'Fathul Wahid',year:'2019',pub:'Andi',pages:'310 hal',
+   desc:'Panduan struktur data berbahasa Indonesia. Array, linked list, stack, queue, tree, dan graph.',
+   tags:['Struktur Data','C','C++','Indonesia'],link:'#'},
+];
+
+let refFanned = false;
+
+function refFanOut() {
+  if (refFanned) return;
+  refFanned = true;
+  document.getElementById('refDeckPile').style.display = 'none';
+  document.getElementById('refFanScene').classList.add('show');
+  document.getElementById('refControls').classList.add('show');
+  refRender(refBooks);
+}
+
+function refRender(list) {
+  const scene = document.getElementById('refFanScene');
+  scene.innerHTML = '';
+  document.getElementById('refShowCount').textContent = list.length;
+  const total = list.length;
+  const isMobile = window.innerWidth <= 768;
+  const isSmall  = window.innerWidth <= 480;
+  const cardW = isSmall ? 120 : isMobile ? 140 : 170;
+  const cardH = isSmall ? 168 : isMobile ? 196 : 238;
+  const maxAngle = Math.min(isMobile ? 45 : 60, total * 6);
+  const spreadX  = Math.min(isMobile ? window.innerWidth * 0.8 : 700, total * (isMobile ? 52 : 68));
+
+  list.forEach((b, i) => {
+    const t = total === 1 ? 0.5 : i / (total - 1);
+    const angle = -maxAngle/2 + t * maxAngle;
+    const x = -spreadX/2 + t * spreadX;
+    const yOff = Math.abs(angle) * 0.8;
+    const delay = i * 0.04;
+    const zIdx = i === Math.floor(total/2) ? 30 : 10 + i;
+
+    const el = document.createElement('div');
+    el.className = 'fan-card';
+    el.style.cssText = `width:${cardW}px;height:${cardH}px;left:50%;margin-left:${-cardW/2}px;z-index:${zIdx};`;
+    el.innerHTML = `
+      <div class="fan-card-inner" style="background:${b.cc}">
+        <div class="fc-top"><span class="fc-num">${b.num}</span><span class="fc-lang">${b.lang}</span></div>
+        <div class="fc-mid">
+          <div class="fc-icon">${b.icon}</div>
+          <div class="fc-title">${b.short}</div>
+        </div>
+        <div class="fc-bot">
+          <div class="fc-author">${b.author}</div>
+          <div class="fc-pub">${b.pub} · ${b.year}</div>
+        </div>
+      </div>`;
+
+    el.addEventListener('mouseenter', () => {
+      el.style.transform = `translateX(${x}px) translateY(${yOff-28}px) rotate(${angle*0.5}deg) scale(1.06)`;
+      el.style.filter = 'brightness(1.1) saturate(1.1)';
+      el.style.zIndex = 100;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.transform = `translateX(${x}px) translateY(${yOff}px) rotate(${angle}deg)`;
+      el.style.filter = 'brightness(0.7) saturate(0.7)';
+      el.style.zIndex = zIdx;
+    });
+    el.addEventListener('click', () => refOpenModal(b));
+    scene.appendChild(el);
+
+    // Animate in
+    el.style.opacity = '0';
+    el.style.transform = `translateX(0px) translateY(60px) rotate(0deg) scale(0.8)`;
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        el.style.opacity = '1';
+        el.style.transform = `translateX(${x}px) translateY(${yOff}px) rotate(${angle}deg)`;
+        el.style.filter = 'brightness(0.7) saturate(0.7)';
+        el.style.transition = `all 0.55s cubic-bezier(0.34,1.4,0.64,1) ${delay}s, filter 0.3s`;
+      }, 10);
+    });
+  });
+}
+
+function refSort(filter, btn) {
+  document.querySelectorAll('.ref-ctrl-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = filter === 'all' ? refBooks : refBooks.filter(b => b.langKey === filter);
+  refRender(filtered);
+}
+
+function refCollapse() {
+  refFanned = false;
+  document.getElementById('refFanScene').classList.remove('show');
+  document.getElementById('refFanScene').innerHTML = '';
+  document.getElementById('refControls').classList.remove('show');
+  document.getElementById('refDeckPile').style.display = 'block';
+  document.querySelectorAll('.ref-ctrl-btn').forEach((b,i) => b.classList.toggle('active', i===0));
+}
+
+function refOpenModal(b) {
+  document.getElementById('refMBar').style.background = `linear-gradient(90deg,${b.accent},transparent)`;
+  document.getElementById('refMCov').style.background = b.cc;
+  document.getElementById('refMCovIc').textContent = b.icon;
+  document.getElementById('refMCovN').textContent = b.num;
+  document.getElementById('refMiN').textContent = b.num;
+  document.getElementById('refMiT').textContent = b.title;
+  document.getElementById('refMiA').textContent = b.author;
+  document.getElementById('refMiA').style.color = b.accent;
+  document.getElementById('refMiC').innerHTML =
+    `<span class="rmi-chip">📅 ${b.year}</span><span class="rmi-chip">📄 ${b.pages}</span><span class="rmi-chip">🏢 ${b.pub}</span><span class="rmi-chip">${b.lang}</span>`;
+  document.getElementById('refMDesc').textContent = b.desc;
+  document.getElementById('refMTags').innerHTML = b.tags.map(t=>`<span class="rmb-tag">${t}</span>`).join('');
+  document.getElementById('refMDl').href = b.link;
+  document.getElementById('refMDl').style.background = b.accent;
+  document.getElementById('refOverlay').classList.add('open');
+}
+function refCloseModal() { document.getElementById('refOverlay').classList.remove('open'); }
+function refTryClose(e) { if(e.target===document.getElementById('refOverlay')) refCloseModal(); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') refCloseModal(); });
+window.addEventListener('resize', () => { if(refFanned) refRender(refBooks); });
+
 </script>
 </body>
-
 </html>
